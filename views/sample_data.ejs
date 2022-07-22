@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title></title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="text-center mt-3 mb-3"><%= title %></h1>
+
+        <% if(action=='add' ) { %>
+            <div class="card">
+                <div class="card-header">Sample Form</div>
+                <div class="card-body">
+                    
+                    <form method="POST" action="/sample_data/add_sample_data">
+                        <div class="row">
+                            <div class="col md-6 f-group">
+                                <div class="mb-3">
+                                    <label>Brand</label>
+                                    <select name="brand" id="brand" class="form-control"
+                                        onchange="populate(this.id,'model')">
+                                        <option value="">Select brand</option>
+                                        <option name='audi' value="audi">Audi</option>
+                                        <option name='mercedes' value="mercedes">Mercedes</option>
+                                        <option name='bmw' value="bmw">BMW</option>
+                                        <option name='volvo' value="volvo">Volvo</option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="col md-6">
+                                <div class="md-3">
+                                    <label>Model</label>
+                                    <select name="model" id="model" class="form-control">
+                                        <option value="" selected="selected">Select brand first</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label>Price</label>
+                                    <input  type="number" name='price' id="price" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label>Upload image</label>
+                                    <input name="img" type="file"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="submit" name="submit_button" class="btn btn-primary" value="Add" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <% } else if(action=='edit' ) { %>
+                <div class="card">
+                    <div class="card-header">Sample Form</div>
+                    <div class="card-body">
+                        <form method="POST" action="/sample_data/edit/<%= sampleData.id %>">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label>Brand</label>
+                                        <input type="text" name="brand" id="brand" class="form-control"
+                                            value="<%= sampleData.brand %>" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label>Model</label>
+                                        <input type="text" name="model" id="model" class="form-control"
+                                            value="<%= sampleData.model %>" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label>Price</label>
+                                        <input type="number" name="price" id="price" class="form-control"
+                                            value="<%= sampleData.price %>" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label>Image</label>
+                                        <input type="file" name="img" id="img" class="form-control"
+                                            value="<%= sampleData.img %>" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input type="submit" name="submit_button" class="btn btn-primary" value="Edit" />
+                            </div>
+                        </form>
+                        <script>
+                            document.getElementById('brand').value = "<%= sampleData.brand %>";
+                            document.getElementById('model').value = "<%= sampleData.model %>";
+                        </script>
+                    </div>
+                </div>
+
+                <% } else { %>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col">Cars table</div>
+                                <div class="col">
+                                    <a href="/sample_data/add" class="btn btn-success btn-sm float-end">Add</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Brand</th>
+                                        <th>Model</th>
+                                        <th>Price € </th>
+                                    </tr>
+                                    <% if(sampleData.length> 0)
+                                        {
+                                        sampleData.forEach(function(data){
+                                        %>
+                                        <tr>
+                                            <td><%= data.brand %></td>
+                                            <td><%= data.model %></td>
+                                            <td><%= data.price %></td>
+                                        </tr>
+                                        <%
+                                             }); 
+                                            } 
+                                            else 
+                                            { 
+                                            %>
+                                            <tr>
+                                                <td colspan="5">No Data Found</td>
+                                            </tr>
+                                            <% } %>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <% } %>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script>function populate(s1, s2) {
+            var s1 = document.getElementById('brand');
+            var s2 = document.getElementById('model');
+
+            s2.innerHTML = '';
+
+            if (s1.value == 'audi') {
+                var optionArray = ['select brand|Select brand', 'a4|A4', 'a8l|A8L', 'q3|Q3', 'rs4|RS4'];
+            } else if (s1.value == 'mercedes') {
+                var optionArray = ['select brand|Select brand', 's class|S class', 'glc|GLC', 'gle|GLE', 'amg|AMG'];
+            } else if (s1.value == 'bmw') {
+                var optionArray = ['select brand|Select brand', 'alpina|ALPINA', 'i8|i8', 'm3|M3', 'x5|X5'];
+            } else if (s1.value == 'volvo') {
+                var optionArray = ['select brand|Select brand', 'v70|V70', 'xc90|XC90', 's80|S80', 'amazon|Amazon'];
+            } else {
+                var optionArray = ['select brand|Select brand']
+            }
+
+            for (var option in optionArray) {
+                var pair = optionArray[option].split('|');
+                var newOption = document.createElement('option');
+
+                newOption.value = pair[0];
+                newOption.innerHTML = pair[1];
+                s2.options.add(newOption);
+            }
+        };
+    </script>
+</body>
+
+</html>
